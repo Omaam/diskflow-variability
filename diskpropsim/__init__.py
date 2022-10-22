@@ -1,3 +1,3 @@
 """diskpropsim initialize module.
 """
-from diskpropsim.propagation import *
+from diskpropsim.simulation import *

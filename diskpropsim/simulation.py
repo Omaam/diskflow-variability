@@ -15,10 +15,30 @@ class DiskPropagation:
         self.decay_ratio = decay_ratio
         self.time = 0
 
-    def elapse(self, num_frame):
+        self.state = None
+        self.state_ = None
+
+    def initialize(self, initial_state_func: callable):
+        """Initialize using initial state function.
+
+        Args:
+            * initial_state_func:
+                initial_state_func must be designed to return
+                values by passing int, like
+                initial_state_func(5) -> out [1, 4, 3, 4, 2]
+        """
+        self.initial_state_func = initial_state_func
+        self._run_burnin()
+
+    def reset(self):
+        self.time = 0
+        self.state = None
+        self.state_ = None
+
+    def run_simulation(self, num_step):
         self.state = np.zeros(
             (
-                num_frame + 1,
+                num_step + 1,
                 self.num_anulus,
                 self.num_segments
             )
@@ -26,15 +46,17 @@ class DiskPropagation:
         self.time = 0
 
         self.state[0] = self.initial_state
-        for _ in range(num_frame):
+        for _ in range(num_step):
             self._update()
 
         self.state_ = self._extract_state()
 
-    def initialize_poisson(self, lam):
-        self._do_burnin(lam)
+    def _extract_state(self):
+        trim_matrix = np.ones((self.num_anulus, self.num_segments))
+        trim_matrix = np.triu(trim_matrix)
+        return self.state * trim_matrix
 
-    def _do_burnin(self, lam):
+    def _run_burnin(self):
         """Do burnin before doing simulation.
 
         For burnion, the number of updates equals the number of segments.
@@ -45,18 +67,13 @@ class DiskPropagation:
                 self.num_anulus,
                 self.num_segments)
         )
-        self.state[0, 0] = np.random.poisson(lam, self.num_segments)
+        self.state[0, 0] = self.initial_state_func(self.num_segments)
 
         for _ in range(self.num_segments):
             self._update()
 
         self.state_ = None
         self.initial_state = self._extract_state()[-1]
-
-    def _extract_state(self):
-        trim_matrix = np.ones((self.num_anulus, self.num_segments))
-        trim_matrix = np.triu(trim_matrix)
-        return self.state * trim_matrix
 
     def _update(self):
 
