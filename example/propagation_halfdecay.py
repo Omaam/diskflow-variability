@@ -17,7 +17,7 @@ def main():
     fig, ax = plt.subplots(5, figsize=(10, 6), sharex="col")
     for i, r_in in enumerate([50, 60, 70, 80, 90]):
 
-        dp = dps.DiskPropagation(r_in, r_out)
+        dp = dps.DiskPropagation(r_in, r_out, 0.95)
         dp.initialize(initial_state_func)
         dp.run_simulation(num_step)
         state = dp.state_

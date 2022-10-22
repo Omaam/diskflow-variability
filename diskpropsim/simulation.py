@@ -24,7 +24,7 @@ class DiskPropagation:
         Args:
             * initial_state_func:
                 initial_state_func must be designed to return
-                values by passing int, like
+                values by passing the size, like
                 initial_state_func(5) -> out [1, 4, 3, 4, 2]
         """
         self.initial_state_func = initial_state_func
@@ -62,11 +62,7 @@ class DiskPropagation:
         For burnion, the number of updates equals the number of segments.
         """
         self.state = np.zeros(
-            (
-                self.num_segments + 1,
-                self.num_anulus,
-                self.num_segments)
-        )
+            (self.num_segments + 1, self.num_anulus, self.num_segments))
         self.state[0, 0] = self.initial_state_func(self.num_segments)
 
         for _ in range(self.num_segments):
@@ -76,9 +72,7 @@ class DiskPropagation:
         self.initial_state = self._extract_state()[-1]
 
     def _update(self):
-
-        weights = np.ones(2)[None, :] * self.decay_ratio
-
+        weights = np.ones(2)[None, :] / 2 * self.decay_ratio
         self.time += 1
 
         i = self.time
