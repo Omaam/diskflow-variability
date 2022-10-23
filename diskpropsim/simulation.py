@@ -7,7 +7,7 @@ import numpy as np
 class DiskPropagation:
     """Disk propagation class.
     """
-    def __init__(self, r_in, r_out, decay_ratio=0.5):
+    def __init__(self, r_in, r_out, decay_ratio=1.0):
         self.r_in = r_in
         self.r_out = r_out
         self.num_anulus = r_out - r_in + 1
@@ -75,7 +75,7 @@ class DiskPropagation:
         self.initial_state = self._extract_state()[-1]
 
     def _update(self):
-        weights = np.ones(2)[None, :] / 2 * self.decay_ratio
+        weights = (np.ones(2)[None, :] / 2) * self.decay_ratio
         self.time += 1
 
         i = self.time
