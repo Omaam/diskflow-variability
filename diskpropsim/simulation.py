@@ -30,6 +30,9 @@ class DiskPropagation:
         self.initial_state_func = initial_state_func
         self._run_burnin()
 
+    def observe(self, observation_func):
+        return observation_func(self.state_)
+
     def reset(self):
         self.time = 0
         self.state = None
@@ -78,5 +81,5 @@ class DiskPropagation:
         i = self.time
         next_state = signal.convolve2d(self.state[i-1], weights, "same")
         next_state = np.roll(next_state, shift=1, axis=0)
-        next_state[0] = np.random.poisson(10, self.num_segments)
+        next_state[0] = self.initial_state_func(self.num_segments)
         self.state[self.time] = next_state
