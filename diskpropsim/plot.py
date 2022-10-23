@@ -3,7 +3,6 @@
 from tqdm import tqdm
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 def plot_snapshot(snapshot_state, r_in, r_out, progress_bar=False):
@@ -38,11 +37,11 @@ def _plot_snapshot_core(snapshot_state, r_in, r_out, ax,
     num_anulus, num_segments = snapshot_state.shape
     size = (r_out - r_in) / num_anulus
 
-    cmap = plt.colormaps["jet_r"]
+    cmap = plt.colormaps["jet"]
 
     for i, anulus in enumerate(tqdm(snapshot_state,
                                     disable=not(progress_bar))):
-        colors = cmap(np.log10(1+anulus))
+        colors = cmap(anulus)
         radius = r_out - i * size
         ax.pie(anulus, radius=radius, colors=colors,
                wedgeprops=dict(width=size))

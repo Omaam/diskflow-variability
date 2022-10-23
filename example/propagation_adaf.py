@@ -9,7 +9,7 @@ import diskpropsim as dps
 def main():
 
     num_step = 1000
-    r_out = 100
+    r_in = 30
 
     def initial_state_func(size):
         return np.random.poisson(10, size)
@@ -19,9 +19,9 @@ def main():
 
     fig, ax = plt.subplots(5, 2, figsize=(10, 12),
                            sharex="col", sharey="row")
-    for i, r_in in enumerate([50, 60, 70, 80, 90]):
+    for i, r_out in enumerate([50, 60, 70, 80, 90]):
 
-        dp = dps.DiskPropagation(r_in, r_out, 0.95)
+        dp = dps.DiskPropagation(r_in, r_out, 1.00)
         dp.initialize(initial_state_func)
         dp.run_simulation(num_step)
 

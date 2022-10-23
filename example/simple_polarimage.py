@@ -19,7 +19,7 @@ def main():
     def observation_func(state):
         return np.random.poisson(state)
 
-    dp = dps.DiskPropagation(r_in, r_out, 0.95)
+    dp = dps.DiskPropagation(r_in, r_out, 1.00)
     dp.initialize(initial_state_func)
     dp.run_simulation(num_step)
 
@@ -29,8 +29,8 @@ def main():
         dps.plot_snapshot(obs[i], r_in, r_out)
         idx_rjust = str(i).rjust(4, "0")
         plt.savefig(f"animation/animation_{idx_rjust}.png")
-        plt.close()
         # plt.show()
+        plt.close()
 
 
 if __name__ == "__main__":
