@@ -19,7 +19,7 @@ def main():
     def observation_func(state):
         return np.random.poisson(state)
 
-    dp = dps.DiskPropagation(r_in, r_out, 1.00)
+    dp = dps.DiskPropagation(r_in, r_out, 1.05)
     dp.initialize(initial_state_func)
     dp.run_simulation(num_step)
 
