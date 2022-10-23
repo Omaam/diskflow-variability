@@ -7,12 +7,12 @@ import numpy as np
 class DiskPropagation:
     """Disk propagation class.
     """
-    def __init__(self, r_in, r_out, decay_ratio=1.0):
+    def __init__(self, r_in, r_out, total_convolve_rate=0.5):
         self.r_in = r_in
         self.r_out = r_out
         self.num_anulus = r_out - r_in + 1
         self.num_segments = r_out
-        self.decay_ratio = decay_ratio
+        self.total_convolve_rate = total_convolve_rate
         self.time = 0
 
         self.state = None
@@ -75,7 +75,7 @@ class DiskPropagation:
         self.initial_state = self._extract_state()[-1]
 
     def _update(self):
-        weights = (np.ones(2)[None, :] / 2) * self.decay_ratio
+        weights = np.ones(2)[None, :] * self.total_convolve_rate / 2
         self.time += 1
 
         i = self.time
