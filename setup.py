@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='diskpropsim',
+    name='diskflow_variability',
     version='0.0.1',
-    description="disk propagation simulation",
+    description="disk flow and variability",
     long_description="",
     author='Tomoki Omama',
     classifiers=[
         "Development Status :: 1 - Planning"
     ],
-    packages=['diskpropsim']
+    packages=['diskflow_variability']
 )

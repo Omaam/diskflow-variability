@@ -4,7 +4,7 @@ from tqdm import trange
 import matplotlib.pyplot as plt
 import numpy as np
 
-import diskpropsim as dps
+import diskflow_variability as dfv
 
 
 def main():
@@ -19,14 +19,14 @@ def main():
     def observation_func(state):
         return np.random.poisson(state)
 
-    dp = dps.DiskPropagation(r_in, r_out, 1.05)
+    dp = dfv.DiskPropagation(r_in, r_out, 1.05)
     dp.initialize(initial_state_func)
     dp.run_simulation(num_step)
 
     obs = dp.observe(observation_func)
 
     for i in trange(10):
-        dps.plot_snapshot(obs[i], r_in, r_out)
+        dfv.plot_snapshot(obs[i], r_in, r_out)
         idx_rjust = str(i).rjust(4, "0")
         plt.savefig(f"animation/animation_{idx_rjust}.png")
         # plt.show()
