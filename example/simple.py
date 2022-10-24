@@ -8,7 +8,7 @@ import diskflow_variability as dfv
 
 def main():
 
-    num_step = 1000
+    num_steps = 1000
     r_in = 30
     r_out = 100
 
@@ -20,13 +20,13 @@ def main():
 
     dp = dfv.DiskPropagation(r_in, r_out, 1.00)
     dp.initialize(initial_state_func)
-    dp.run_simulation(num_step)
+    dp.run_simulation(num_steps)
 
     state = dp.state_
     obs = dp.observe(observation_func)
 
     fig, ax = plt.subplots(2, figsize=(6, 6))
-    time = np.arange(num_step + 1)
+    time = np.arange(num_steps + 1)
     obs_count_rate = np.sum(obs, axis=(1, 2))
     state_count_rate = np.sum(state, axis=(1, 2))
     ax[0].plot(time, state_count_rate)

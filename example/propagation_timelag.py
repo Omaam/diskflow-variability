@@ -22,7 +22,7 @@ def set_lagrange_correlation_function(lags, correlations, maxlags):
 
 def main():
 
-    num_step = 10000
+    num_steps = 10000
     r_out = 101
     r_in = 30
 
@@ -34,7 +34,7 @@ def main():
 
     dp = dfv.DiskPropagation(r_in, r_out, 1.05)
     dp.initialize(initial_state_func)
-    dp.run_simulation(num_step)
+    dp.run_simulation(num_steps, 3)
     state = dp.state_
 
     variable_irdisk = np.sum(state[:, 0:1, :], axis=(1, 2))

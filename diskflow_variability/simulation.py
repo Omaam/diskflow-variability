@@ -81,11 +81,19 @@ class DiskPropagation:
         self.state = None
         self.state_ = None
 
-    def run_simulation(self, num_step):
-        """num_step times updates are done to run simulation.
+    def run_simulation(self, num_steps, flow_velocity: int = 1):
+        """num_steps times updates are done to run simulation.
+
+        Args:
+            * num_steps:
+                Number of steps.
+            * flow_velocity:
+                Flow velocity. State is stored after flow velocity
+                times updates are done. For example, if flow_velocity
+                = 1, every state updates are stored.
         """
         self.state = np.zeros(
-            (num_step + 1,
+            (num_steps + 1,
              self.num_anulus,
              self.num_segments)
         )
@@ -97,8 +105,10 @@ class DiskPropagation:
         else:
             self.state[0] = self.initial_state_func(self.num_segments)
 
-        for _ in range(num_step):
+        for _ in range(num_steps):
             next_state = self._update(self.state[self.time])
+            for _ in range(flow_velocity):
+                next_state = self._update(next_state)
             self.time += 1
             self.state[self.time] = next_state
         self.state_ = self._extract_state()
