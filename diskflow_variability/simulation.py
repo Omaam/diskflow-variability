@@ -52,7 +52,7 @@ class DiskPropagation:
         self.state = None
         self.state_ = None
 
-    def initialize(self, initial_state_func: callable):
+    def initialize(self, initial_annulus_generator: callable):
         """Initialize using initial state function.
 
         Args:
@@ -61,7 +61,8 @@ class DiskPropagation:
                 values by passing the size, like
                 initial_state_func(5) -> out [1, 4, 3, 4, 2]
         """
-        self.initial_state_func = initial_state_func
+        self.initial_annulus_generator = initial_annulus_generator(
+            self.num_segments)
 
         # To initialize, self.num_anulus times updates are required.
         self.run_simulation(self.num_anulus)
@@ -103,11 +104,11 @@ class DiskPropagation:
         if self.initial_state is not None:
             self.state[0] = self.initial_state
         else:
-            self.state[0] = self.initial_state_func(self.num_segments)
+            self.state[0] = next(self.initial_annulus_generator)
 
         for _ in range(num_steps):
             next_state = self._update(self.state[self.time])
-            for _ in range(flow_velocity):
+            for _ in range(flow_velocity-1):
                 next_state = self._update(next_state)
             self.time += 1
             self.state[self.time] = next_state
@@ -126,5 +127,5 @@ class DiskPropagation:
         weights = np.ones(2)[None, :] * self.total_convolve_rate / 2
         next_state = signal.convolve2d(current_state, weights, "same")
         next_state = np.roll(next_state, shift=1, axis=0)
-        next_state[0] = self.initial_state_func(self.num_segments)
+        next_state[0] = next(self.initial_annulus_generator)
         return next_state
