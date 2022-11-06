@@ -32,7 +32,7 @@ def main():
     v_diskir = 1
     v_adaf = 1
 
-    num_steps_diskir = num_steps + (r2 - r1) // v_adaf + 1
+    num_steps_diskir = num_steps + (r2 - r1) + 1
     num_steps_adaf = num_steps
 
     np.random.seed(1)
@@ -41,7 +41,7 @@ def main():
         while True:
             yield np.random.poisson(10, size)
 
-    dp_diskir = dfv.DiskPropagation(r2, r3, 1.05)
+    dp_diskir = dfv.DiskPropagation(r2, r3, 0.90)
     dp_diskir.initialize(initial_annulus_generator_diskir)
     dp_diskir.run_simulation(num_steps_diskir, v_diskir)
 
@@ -49,28 +49,30 @@ def main():
         for snapshot in dp_diskir.state_:
             yield snapshot[-1][-size:]
 
-    dp_adaf = dfv.DiskPropagation(r1, r2, 1.03)
+    dp_adaf = dfv.DiskPropagation(r1, r2, 1.10)
     dp_adaf.initialize(initial_annulus_generator_adaf)
     dp_adaf.run_simulation(num_steps_adaf, v_adaf)
 
     def observation_func(state):
         return np.random.poisson(state)
 
-    obs_diskir = dp_diskir.observe(observation_func)[-num_steps:]
+    idx_start_diskir = r2 - r1 + 1
+    obs_diskir = dp_diskir.observe(
+        observation_func)[idx_start_diskir:idx_start_diskir+num_steps]
     obs_adaf = dp_adaf.observe(observation_func)[:num_steps]
 
-    time = np.arange(num_steps)
+    times = np.arange(num_steps)
     countrate_diskir = np.sum(obs_diskir, axis=(1, 2))
     countrate_adaf = np.sum(obs_adaf, axis=(1, 2))
 
     fig, ax = plt.subplots(3, figsize=(6, 6))
-    ax[0].plot(time, countrate_diskir)
+    ax[0].plot(times, countrate_diskir)
     ax[0].set_title("diskir; (Rin, Rout) = ({}, {})".format(r2, r3))
-    ax[0].set_ylabel("State\nCounts")
+    ax[0].set_ylabel("Counts")
 
-    ax[1].plot(time, countrate_adaf)
+    ax[1].plot(times, countrate_adaf)
     ax[1].set_title("ADAF; (Rin, Rout) = ({}, {})".format(r1, r2))
-    ax[1].set_ylabel("Observation\nCounts")
+    ax[1].set_ylabel("Counts")
     ax[1].set_xlabel("Time")
 
     lags, correlations = compute_crosscorrelation(
@@ -80,6 +82,8 @@ def main():
     ax[2].scatter(lags, correlations)
     ax[2].set_xlabel("Lag")
     ax[2].set_ylabel("CCF")
+
+    fig.align_ylabels()
 
     plt.tight_layout()
     plt.show()

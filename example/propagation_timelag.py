@@ -27,7 +27,8 @@ def main():
     r_in = 30
 
     def initial_state_func(size):
-        return np.random.poisson(10, size)
+        while 1:
+            yield np.random.poisson(10, size)
 
     def observation_func(state):
         return np.random.poisson(state)
