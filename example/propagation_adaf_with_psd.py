@@ -4,7 +4,7 @@ from scipy import signal
 import matplotlib.pyplot as plt
 import numpy as np
 
-import diskflow_variability as dfv
+import diskflowsim as dfs
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
                            sharex="col")
     for i, r_out in enumerate([50, 100, 200]):
 
-        dp = dfv.DiskPropagation(r_in, r_out, 1.00)
+        dp = dfs.DiskPropagation(r_in, r_out, 1.00)
         dp.initialize(initial_state_func)
         dp.run_simulation(num_step)
 

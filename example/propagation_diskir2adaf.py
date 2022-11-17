@@ -5,7 +5,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import numpy as np
 
-import diskflow_variability as dfv
+import diskflowsim as dfs
 
 
 def compute_crosscorrelation(in1, in2, whitening=True):
@@ -41,7 +41,7 @@ def main():
         while True:
             yield np.random.poisson(10, size)
 
-    dp_diskir = dfv.DiskPropagation(r2, r3, 0.90)
+    dp_diskir = dfs.DiskPropagation(r2, r3, 0.90)
     dp_diskir.initialize(initial_annulus_generator_diskir)
     dp_diskir.run_simulation(num_steps_diskir, v_diskir)
 
@@ -49,7 +49,7 @@ def main():
         for snapshot in dp_diskir.state_:
             yield snapshot[-1][-size:]
 
-    dp_adaf = dfv.DiskPropagation(r1, r2, 1.10)
+    dp_adaf = dfs.DiskPropagation(r1, r2, 1.10)
     dp_adaf.initialize(initial_annulus_generator_adaf)
     dp_adaf.run_simulation(num_steps_adaf, v_adaf)
 

@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-import diskflow_variability as dfv
+import diskflowsim as dfs
 
 
 def main():
@@ -22,7 +22,7 @@ def main():
                            sharex="col", sharey="row")
     for i, r_in in enumerate([50, 60, 70, 80, 90]):
 
-        dp = dfv.DiskPropagation(r_in, r_out, 0.95)
+        dp = dfs.DiskPropagation(r_in, r_out, 0.95)
         dp.initialize(initial_state_func)
         dp.run_simulation(num_step)
 
