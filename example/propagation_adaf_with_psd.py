@@ -12,6 +12,8 @@ def main():
     num_step = 1000
     r_in = 30
 
+    np.random.seed(0)
+
     def initial_state_func(size):
         while 1:
             yield np.random.poisson(10, size)
@@ -19,7 +21,7 @@ def main():
     def observation_func(state):
         return np.random.poisson(state)
 
-    fig, ax = plt.subplots(3, 2, figsize=(10, 12),
+    fig, ax = plt.subplots(3, 2, figsize=(8, 5),
                            sharex="col")
     for i, r_out in enumerate([50, 100, 200]):
 
@@ -39,10 +41,11 @@ def main():
         ax[i, 1].set_xscale("log")
         ax[i, 1].set_yscale("log")
 
-    ax[0, 0].set_title("State")
-    ax[0, 1].set_title("Observation")
-    fig.suptitle("Disk propagation for ADAF")
-    fig.supxlabel("Time")
+    ax[0, 0].set_title("Variability")
+    ax[0, 1].set_title("Power Spectrum")
+    ax[1, 1].set_ylabel("Power")
+    ax[2, 0].set_xlabel("Time (sample)")
+    ax[2, 1].set_xlabel("Frequency (Hz/sample)")
     fig.supylabel("Counts")
     plt.tight_layout()
     plt.show()

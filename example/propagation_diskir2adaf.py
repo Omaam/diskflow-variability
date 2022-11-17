@@ -79,7 +79,7 @@ def main():
         countrate_adaf, countrate_diskir)
     lags, correlations = set_lagrange_correlation_function(
         lags, correlations, 200)
-    ax[2].scatter(lags, correlations)
+    ax[2].stem(lags, correlations, markerfmt="-")
     ax[2].set_xlabel("Lag")
     ax[2].set_ylabel("CCF")
 
